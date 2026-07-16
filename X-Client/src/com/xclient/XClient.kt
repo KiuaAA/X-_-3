@@ -41,4 +41,11 @@ fun main() {
     } catch (e: Exception) {
         e.printStackTrace()
     }
+}        while (true) {
+            Thread.sleep(5000)
+            // Background tasks: preload assets, check for updates, etc.
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
 }
