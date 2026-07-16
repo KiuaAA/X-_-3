@@ -1,7 +1,5 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
-const fs = require('fs');
-const { downloadMinecraft, downloadJavaRuntime, downloadLibs } = require('./downloader');
 
 let mainWindow;
 
@@ -14,7 +12,6 @@ function createWindow() {
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js'),
     },
-    icon: path.join(__dirname, 'assets/icon.png'), // optional
   });
 
   mainWindow.loadFile(path.join(__dirname, 'renderer/index.html'));
@@ -31,10 +28,22 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
 
-// Example: get Minecraft installation path
+// Get Minecraft installation path
 ipcMain.handle('get-minecraft-path', () => {
   return path.join(__dirname, '..', 'Minecraft');
 });
+
+// Get Java Runtime path
+ipcMain.handle('get-java-path', () => {
+  const javaDir = path.join(__dirname, '..', 'Java-Runtime');
+  return javaDir;
+});
+
+// Show a dialog
+ipcMain.handle('show-dialog', async (event, options) => {
+  const result = await dialog.showMessageBox(mainWindow, options);
+  return result;
+});});
 
 // Example: get Java Runtime path
 ipcMain.handle('get-java-path', () => {
