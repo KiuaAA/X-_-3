@@ -1,0 +1,9 @@
+{
+  "name": "x-client",
+  "version": "1.0.0",
+  "description": "X Client background process",
+  "main": "client.js",
+  "scripts": {
+    "start": "node client.js"
+  }
+}
