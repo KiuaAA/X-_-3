@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { downloadMinecraft, downloadJavaRuntime, downloadLibs } = require('./downloader');
 
 let mainWindow;
 
@@ -38,7 +39,6 @@ ipcMain.handle('get-minecraft-path', () => {
 // Example: get Java Runtime path
 ipcMain.handle('get-java-path', () => {
   const javaDir = path.join(__dirname, '..', 'Java-Runtime');
-  // You'd want to scan for bin/java or bin/java.exe
   return javaDir;
 });
 
@@ -46,4 +46,34 @@ ipcMain.handle('get-java-path', () => {
 ipcMain.handle('show-dialog', async (event, options) => {
   const result = await dialog.showMessageBox(mainWindow, options);
   return result;
+});
+
+// Download Minecraft version
+ipcMain.handle('download-minecraft', async (event, version) => {
+  try {
+    await downloadMinecraft(version);
+    return { success: true };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
+});
+
+// Download Java Runtime
+ipcMain.handle('download-java-runtime', async () => {
+  try {
+    await downloadJavaRuntime();
+    return { success: true };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
+});
+
+// Download libraries
+ipcMain.handle('download-libs', async () => {
+  try {
+    await downloadLibs();
+    return { success: true };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
 });
